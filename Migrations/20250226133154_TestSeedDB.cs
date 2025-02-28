@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace FinanceManagerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class TestSeedDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,7 +60,8 @@ namespace FinanceManagerAPI.Migrations
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     Amount = table.Column<decimal>(type: "TEXT", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,6 +72,35 @@ namespace FinanceManagerAPI.Migrations
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "PasswordHash", "Username" },
+                values: new object[,]
+                {
+                    { 1, "john@example.com", "Password123", "John Doe" },
+                    { 2, "jane@example.com", "SecurePass456", "Jane Smith" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Accounts",
+                columns: new[] { "Id", "Balance", "Name", "Type", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 1500.00m, "CheckingAccount", 0, 1 },
+                    { 2, 5000.00m, "SavingsAccount", 1, 1 },
+                    { 3, 200.00m, "Cash", 3, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Transactions",
+                columns: new[] { "Id", "AccountId", "Amount", "Date", "Description", "Type", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 1, -100.00m, new DateTime(2025, 5, 5, 16, 0, 0, 0, DateTimeKind.Unspecified), "Groceries", 1, 1 },
+                    { 2, 2, 500.00m, new DateTime(2025, 4, 4, 9, 0, 0, 0, DateTimeKind.Unspecified), "Salary", 0, 1 },
+                    { 3, 3, 500.00m, new DateTime(2025, 3, 3, 10, 0, 0, 0, DateTimeKind.Unspecified), "CashGift", 0, 2 }
                 });
 
             migrationBuilder.CreateIndex(

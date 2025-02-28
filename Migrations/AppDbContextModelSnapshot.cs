@@ -47,7 +47,7 @@ namespace FinanceManagerAPI.Migrations
                         {
                             Id = 1,
                             Balance = 1500.00m,
-                            Name = "Checking Account",
+                            Name = "CheckingAccount",
                             Type = 0,
                             UserId = 1
                         },
@@ -55,7 +55,7 @@ namespace FinanceManagerAPI.Migrations
                         {
                             Id = 2,
                             Balance = 5000.00m,
-                            Name = "Savings Account",
+                            Name = "SavingsAccount",
                             Type = 1,
                             UserId = 1
                         },
@@ -91,6 +91,9 @@ namespace FinanceManagerAPI.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -103,9 +106,10 @@ namespace FinanceManagerAPI.Migrations
                             Id = 1,
                             AccountId = 1,
                             Amount = -100.00m,
-                            Date = new DateTime(2025, 4, 4, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Groceries",
-                            Type = 1
+                            Type = 1,
+                            UserId = 1
                         },
                         new
                         {
@@ -114,7 +118,18 @@ namespace FinanceManagerAPI.Migrations
                             Amount = 500.00m,
                             Date = new DateTime(2025, 4, 4, 9, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Salary",
-                            Type = 0
+                            Type = 0,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 3,
+                            Amount = 500.00m,
+                            Date = new DateTime(2025, 3, 3, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "CashGift",
+                            Type = 0,
+                            UserId = 2
                         });
                 });
 
@@ -160,34 +175,20 @@ namespace FinanceManagerAPI.Migrations
 
             modelBuilder.Entity("FinanceManagerAPI.Models.Account", b =>
                 {
-                    b.HasOne("FinanceManagerAPI.Models.User", "User")
-                        .WithMany("Accounts")
+                    b.HasOne("FinanceManagerAPI.Models.User", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FinanceManagerAPI.Models.Transaction", b =>
                 {
-                    b.HasOne("FinanceManagerAPI.Models.Account", "Account")
-                        .WithMany("Transactions")
+                    b.HasOne("FinanceManagerAPI.Models.Account", null)
+                        .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("FinanceManagerAPI.Models.Account", b =>
-                {
-                    b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("FinanceManagerAPI.Models.User", b =>
-                {
-                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

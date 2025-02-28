@@ -37,7 +37,7 @@ public class TransactionController : ControllerBase
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         var transactions = await _context.Transactions
-            .Where(t => t.Account.UserId == userId)
+            .Where(t => t.UserId == userId) //    .Where(t => t.Account.UserId == userId)
             .ToListAsync();
 
         return Ok(transactions);
