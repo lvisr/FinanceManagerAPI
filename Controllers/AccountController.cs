@@ -23,7 +23,11 @@ public class AccountController : ControllerBase
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         account.UserId = userId;
 
+        var user = await _context.Users.FindAsync(userId);
+
         _context.Accounts.Add(account);
+        user.Accounts.Add(account);
+        
         await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetAccountById), new { id = account.Id }, account);
     }

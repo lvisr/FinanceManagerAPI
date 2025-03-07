@@ -16,6 +16,6 @@ namespace FinanceManagerAPI.Models
         [Required]
         public string PasswordHash { get; set; }
 
-        //public List<Account> Accounts { get; set; } = new();
+        public List<Account> Accounts { get; set; } = new();
     }
 }

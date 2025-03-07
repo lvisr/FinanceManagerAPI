@@ -58,9 +58,12 @@ public class UserController : ControllerBase
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         var user = await _context.Users.FindAsync(userId);
-
+        //var user = _context.Users.Include(u => u.Accounts).FirstOrDefault(u => u.Id == userId);
+        
         if (user == null)
             return NotFound("User not found.");
+
+        _context.Entry(user).Collection(u => u.Accounts).Load(); // NEW TEST
 
         return Ok(user);
     }

@@ -3,6 +3,7 @@ using System;
 using FinanceManagerAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceManagerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250307132308_TestNavigationPropertiesListAccount4")]
+    partial class TestNavigationPropertiesListAccount4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
@@ -166,14 +169,14 @@ namespace FinanceManagerAPI.Migrations
                         {
                             Id = 1,
                             Email = "john@example.com",
-                            PasswordHash = "Password123",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIVKrR1L8tvsU/NMS4cgtrrT2ax2Mtvay+gzmr2m8eE79SZcwFfoe7ZQbnPKclNb9A==",
                             Username = "John Doe"
                         },
                         new
                         {
                             Id = 2,
                             Email = "jane@example.com",
-                            PasswordHash = "SecurePass456",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGYecMZnk0LKxGafJxH017RgS10W9U4orGUFbUUfYwNHFniaU4xcIcYqSb0utNolJA==",
                             Username = "Jane Smith"
                         });
                 });

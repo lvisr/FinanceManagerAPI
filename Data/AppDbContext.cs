@@ -14,12 +14,12 @@ namespace FinanceManagerAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-/*             // One-to-Many: User -> Accounts
+            // One-to-Many: User -> Accounts
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Accounts)
-                .WithOne(a => a.User)
+                .WithOne()
                 .HasForeignKey(a => a.UserId);
-
+/*
             // One-to-Many: Account -> Transactions
             modelBuilder.Entity<Account>()
                 .HasMany(a => a.Transactions)
