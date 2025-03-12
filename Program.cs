@@ -132,9 +132,7 @@ void SeedDatabase(AppDbContext context, PasswordHasher<User> passwordHasher)
         context.Users.Add(U2);
 
         context.SaveChanges();
-    }
-    if (context.Users.Any()) // If there are users seed accounts
-    {
+
         // Seed Accounts  //  AccountType { Checking, Savings, Debt, Cash }
         var A1 = new Account 
         { 
@@ -166,9 +164,7 @@ void SeedDatabase(AppDbContext context, PasswordHasher<User> passwordHasher)
         context.Accounts.Add(A3);
 
         context.SaveChanges();
-    }
-    if (context.Accounts.Any()) // If there are accounts seed transactions
-    {
+
         // Seed Transactions  // TransactionType { Income, Expense, Transfer }
         // DateTime example = new DateTime(2018, 4, 4, 16, 0, 0);
         var T1 = new Transaction 
