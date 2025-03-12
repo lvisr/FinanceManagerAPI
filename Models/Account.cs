@@ -9,7 +9,7 @@ namespace FinanceManagerAPI.Models
         public AccountType Type { get; set; }
         public decimal Balance { get; set; } = 0;
         public int UserId { get; set; }
-        //public User User { get; set; }
-        //public List<Transaction> Transactions { get; set; } = new();
+        public User User { get; set; }
+        public List<Transaction> Transactions { get; set; } = new();
     }
 }

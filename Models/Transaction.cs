@@ -10,7 +10,6 @@ namespace FinanceManagerAPI.Models
         public decimal Amount { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
         public int AccountId { get; set; }
-        public int UserId { get; set; }   // Added for test
-        //public Account Account { get; set; }
+        public Account Account { get; set; }
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceManagerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250307131457_TestNavigationPropertiesListAccount")]
-    partial class TestNavigationPropertiesListAccount
+    [Migration("20250312211321_FullModelRelations")]
+    partial class FullModelRelations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,42 +39,11 @@ namespace FinanceManagerAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("UserId1");
-
                     b.ToTable("Accounts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Balance = 1500.00m,
-                            Name = "CheckingAccount",
-                            Type = 0,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Balance = 5000.00m,
-                            Name = "SavingsAccount",
-                            Type = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Balance = 200.00m,
-                            Name = "Cash",
-                            Type = 3,
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("FinanceManagerAPI.Models.Transaction", b =>
@@ -99,46 +68,11 @@ namespace FinanceManagerAPI.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
                     b.ToTable("Transactions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccountId = 1,
-                            Amount = -100.00m,
-                            Date = new DateTime(2025, 5, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Groceries",
-                            Type = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AccountId = 2,
-                            Amount = 500.00m,
-                            Date = new DateTime(2025, 4, 4, 9, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Salary",
-                            Type = 0,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AccountId = 3,
-                            Amount = 500.00m,
-                            Date = new DateTime(2025, 3, 3, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "CashGift",
-                            Type = 0,
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("FinanceManagerAPI.Models.User", b =>
@@ -163,44 +97,33 @@ namespace FinanceManagerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "john@example.com",
-                            PasswordHash = "Password123",
-                            Username = "John Doe"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "jane@example.com",
-                            PasswordHash = "SecurePass456",
-                            Username = "Jane Smith"
-                        });
                 });
 
             modelBuilder.Entity("FinanceManagerAPI.Models.Account", b =>
                 {
-                    b.HasOne("FinanceManagerAPI.Models.User", null)
-                        .WithMany()
+                    b.HasOne("FinanceManagerAPI.Models.User", "User")
+                        .WithMany("Accounts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FinanceManagerAPI.Models.User", null)
-                        .WithMany("Accounts")
-                        .HasForeignKey("UserId1");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FinanceManagerAPI.Models.Transaction", b =>
                 {
-                    b.HasOne("FinanceManagerAPI.Models.Account", null)
-                        .WithMany()
+                    b.HasOne("FinanceManagerAPI.Models.Account", "Account")
+                        .WithMany("Transactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("FinanceManagerAPI.Models.Account", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("FinanceManagerAPI.Models.User", b =>
