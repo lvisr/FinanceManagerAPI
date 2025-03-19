@@ -21,13 +21,16 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> CreateAccount([FromBody] Account account)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+/*         var user = await _context.Users.FindAsync(userId);
+
+        if (user == null)
+            return NotFound("User not found");
+
+        account.User = user; */
         account.UserId = userId;
 
-        var user = await _context.Users.FindAsync(userId);
-
         _context.Accounts.Add(account);
-        user.Accounts.Add(account);
-        
+
         await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetAccountById), new { id = account.Id }, account);
     }
@@ -36,7 +39,11 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> GetAllAccounts()
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        var accounts = await _context.Accounts.Where(a => a.UserId == userId).ToListAsync();
+        var accounts = await _context.Accounts
+            //.Include(a => a.Transactions)  // Load the related Transactions
+            .Where(a => a.UserId == userId)
+            .ToListAsync();
+        
         return Ok(accounts);
     }
 
@@ -44,7 +51,9 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> GetAccountById(int id)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id && a.UserId == userId);
+        var account = await _context.Accounts
+            .Include(a => a.Transactions)  // Load the related Transactions
+            .FirstOrDefaultAsync(a => a.Id == id && a.UserId == userId);
 
         if (account == null)
             return NotFound("Account not found.");
@@ -59,7 +68,7 @@ public class AccountController : ControllerBase
         var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id && a.UserId == userId);
 
         if (account == null)
-            return NotFound("Account not found.");
+            return NotFound("Account not found. Wrong Account Id or Account belongs to another User");
 
         account.Name = updatedAccount.Name;
         account.Type = updatedAccount.Type;
@@ -76,7 +85,7 @@ public class AccountController : ControllerBase
         var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id && a.UserId == userId);
 
         if (account == null)
-            return NotFound("Account not found.");
+            return NotFound("Account not found. Wrong Account Id or Account belongs to another User");
 
         _context.Accounts.Remove(account);
         await _context.SaveChangesAsync();

@@ -25,7 +25,7 @@ public class UserController : ControllerBase
         _passwordHasher = new PasswordHasher<User>();
     }
 
-    // ✅ User Registration
+    // User Registration
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] User user)
     {
@@ -39,7 +39,7 @@ public class UserController : ControllerBase
         return Ok(new { message = "User registered successfully" });
     }
 
-    // ✅ User Login & Token Generation
+    // User Login & Token Generation
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] User loginUser)
     {
@@ -51,24 +51,26 @@ public class UserController : ControllerBase
         return Ok(new { token });
     }
 
-    // ✅ Get User Profile
+    // Get User Profile
     [HttpGet("profile")]
     [Authorize]
     public async Task<IActionResult> GetProfile()
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        var user = await _context.Users.FindAsync(userId);
-        //var user = _context.Users.Include(u => u.Accounts).FirstOrDefault(u => u.Id == userId);
+        var user = await _context.Users//.FindAsync(userId); // alternative to .FirstOrDefaultAsync if no .include
+            .Include(u => u.Accounts)  // Load the related Accounts
+            //.ThenInclude(a => a.Transactions) // to load Transactions as well if needed
+            .FirstOrDefaultAsync(u => u.Id == userId);
         
         if (user == null)
             return NotFound("User not found.");
 
-        _context.Entry(user).Collection(u => u.Accounts).Load(); // NEW TEST
+        //_context.Entry(user).Collection(u => u.Accounts).Load(); // no need, using .Include(u => u.Accounts)
 
         return Ok(user);
     }
 
-    // ✅ Update User Profile
+    // Update User Profile
     [HttpPut("profile")]
     [Authorize]
     public async Task<IActionResult> UpdateProfile([FromBody] User updatedUser)
