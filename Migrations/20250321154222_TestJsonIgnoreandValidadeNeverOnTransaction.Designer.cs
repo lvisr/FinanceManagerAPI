@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceManagerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250319145537_TestJsonIgnoreandValidadeNever")]
-    partial class TestJsonIgnoreandValidadeNever
+    [Migration("20250321154222_TestJsonIgnoreandValidadeNeverOnTransaction")]
+    partial class TestJsonIgnoreandValidadeNeverOnTransaction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

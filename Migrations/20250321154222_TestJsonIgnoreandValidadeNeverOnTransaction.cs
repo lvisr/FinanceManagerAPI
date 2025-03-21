@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FinanceManagerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class TestJsonIgnoreandValidadeNever : Migration
+    public partial class TestJsonIgnoreandValidadeNeverOnTransaction : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
