@@ -21,12 +21,7 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> CreateAccount([FromBody] Account account)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-/*         var user = await _context.Users.FindAsync(userId);
 
-        if (user == null)
-            return NotFound("User not found");
-
-        account.User = user; */
         account.UserId = userId;
 
         _context.Accounts.Add(account);

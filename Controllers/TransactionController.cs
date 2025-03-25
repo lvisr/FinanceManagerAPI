@@ -26,6 +26,8 @@ public class TransactionController : ControllerBase
         if (account == null)
             return BadRequest("Invalid account.");
 
+        account.Balance = account.Balance + transaction.Amount;
+
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync();
 
@@ -46,9 +48,15 @@ public class TransactionController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTransactionById(int id)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
         var transaction = await _context.Transactions.FindAsync(id);
         if (transaction == null)
             return NotFound("Transaction not found.");
+
+        var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == transaction.AccountId);
+        if (account is null || account.UserId != userId)
+            return BadRequest("Transaction not from Authenticated user.");
 
         return Ok(transaction);
     }
@@ -56,9 +64,17 @@ public class TransactionController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTransaction(int id)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
         var transaction = await _context.Transactions.FindAsync(id);
         if (transaction == null)
             return NotFound("Transaction not found.");
+
+        var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == transaction.AccountId);
+        if (account is null || account.UserId != userId)
+            return BadRequest("Transaction not from Authenticated user.");
+               
+        account.Balance = account.Balance - transaction.Amount; // Update Account Balance
 
         _context.Transactions.Remove(transaction);
         await _context.SaveChangesAsync();
