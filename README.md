@@ -27,8 +27,8 @@ All protected routes require the Authorization: Bearer <token> header.
 ### USER Controller
 | HTTP Method |	Endpoint |	Auth Required |	Description |
 | ------------- | ------------- asp.net core versions| ------------- | ------------- |
-|POST |	/api/users/register |	❌ |	Register a new user |
-|POST |	/api/users/login |	❌ |	Authenticate & Get Token |
+| POST |	/api/users/register |	❌ |	Register a new user |
+| POST |	/api/users/login |	❌ |	Authenticate & Get Token |
 | GET |	/api/users/profile |	✅ |	Get user profile |
 | PUT |	/api/users/profile |	✅ |	Update user profile |
 
